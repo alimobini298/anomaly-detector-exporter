@@ -1,0 +1,17 @@
+services:
+  anomaly-detector:
+    build: .
+    container_name: anomaly-detector
+    ports:
+      - "9091:9091"
+    volumes:
+      - ./config.ini:/app/config.ini:ro
+    environment:
+      - TZ=Asia/Tehran
+    restart: unless-stopped
+    networks:
+      - monitoring
+
+networks:
+  monitoring:
+    external: true

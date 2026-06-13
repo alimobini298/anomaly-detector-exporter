@@ -1,0 +1,14 @@
+# Build
+anomaly-detector
+*.exe
+
+# Config with secrets
+config.local.ini
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Docker
+.env
