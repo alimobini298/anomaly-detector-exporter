@@ -870,7 +870,7 @@
           "expr": "sum(last_over_time(anomaly_detected{metric_name=~\"node_.*\",instance=~\"$instance\"}[5m]) == 1) or vector(0)",
           "instant": true,
           "range": false,
-          "format": "table",
+          "format": "time_series",
           "legendFormat": "Node",
           "editorMode": "code"
         },
@@ -883,7 +883,7 @@
           "expr": "sum(last_over_time(anomaly_detected{metric_name=~\"nginx_.*\",instance=~\"$instance\"}[5m]) == 1) or vector(0)",
           "instant": true,
           "range": false,
-          "format": "table",
+          "format": "time_series",
           "legendFormat": "Nginx",
           "editorMode": "code"
         },
@@ -896,7 +896,7 @@
           "expr": "sum(last_over_time(anomaly_detected{metric_name=~\"mysql_.*\",instance=~\"$instance\"}[5m]) == 1) or vector(0)",
           "instant": true,
           "range": false,
-          "format": "table",
+          "format": "time_series",
           "legendFormat": "MySQL",
           "editorMode": "code"
         },
@@ -909,7 +909,7 @@
           "expr": "sum(last_over_time(anomaly_detected{metric_name=~\"redis_.*\",instance=~\"$instance\"}[5m]) == 1) or vector(0)",
           "instant": true,
           "range": false,
-          "format": "table",
+          "format": "time_series",
           "legendFormat": "Redis",
           "editorMode": "code"
         },
@@ -922,7 +922,7 @@
           "expr": "sum(last_over_time(anomaly_detected{metric_name=~\"phpfpm_.*\",instance=~\"$instance\"}[5m]) == 1) or vector(0)",
           "instant": true,
           "range": false,
-          "format": "table",
+          "format": "time_series",
           "legendFormat": "PHP-FPM",
           "editorMode": "code"
         },
@@ -935,7 +935,7 @@
           "expr": "sum(last_over_time(anomaly_detected{metric_name=~\"haproxy_.*\",instance=~\"$instance\"}[5m]) == 1) or vector(0)",
           "instant": true,
           "range": false,
-          "format": "table",
+          "format": "time_series",
           "legendFormat": "HAProxy",
           "editorMode": "code"
         },
@@ -948,11 +948,12 @@
           "expr": "sum(last_over_time(anomaly_detected{metric_name=~\"container_.*|http_.*\",instance=~\"$instance\"}[5m]) == 1) or vector(0)",
           "instant": true,
           "range": false,
-          "format": "table",
+          "format": "time_series",
           "legendFormat": "HTTP/Containers",
           "editorMode": "code"
         }
-      ]
+      ],
+      "version": 3
     },
     {
       "collapsed": false,
