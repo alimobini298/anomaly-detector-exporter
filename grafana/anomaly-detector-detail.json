@@ -1,18 +1,17 @@
 {
   "id": null,
   "uid": "anomaly-detail",
-  "title": "Anomaly Detector \u2014 Detail v2",
-  "description": "v2: max() on all stat queries (fixes multi-series), Confidence panels added, Window Anomaly % fixed, labels/job removed.",
+  "title": "Anomaly Detector \u2014 Detail v3",
+  "description": "v3: max by() on all queries, last_over_time alignment, fixes split-row merge.",
   "tags": [
     "anomaly",
     "sre",
-    "devops",
     "detail",
-    "v2"
+    "v3"
   ],
   "timezone": "browser",
   "schemaVersion": 36,
-  "version": 2,
+  "version": 3,
   "refresh": "1m",
   "time": {
     "from": "now-3h",
@@ -23,7 +22,7 @@
   "graphTooltip": 1,
   "links": [
     {
-      "title": "\u2190 Back to Overview",
+      "title": "\u2190 Overview",
       "url": "/d/anomaly-overview/anomaly-detector-overview",
       "type": "link",
       "targetBlank": false,
@@ -99,9 +98,9 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "max(anomaly_current_value{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
-          "instant": true,
-          "range": false,
+          "expr": "max(last_over_time((anomaly_current_value{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})[5m:]))",
+          "instant": false,
+          "range": true,
           "format": "time_series",
           "legendFormat": "",
           "editorMode": "code"
@@ -162,9 +161,9 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "max(anomaly_baseline_mean{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
-          "instant": true,
-          "range": false,
+          "expr": "max(last_over_time((anomaly_baseline_mean{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})[5m:]))",
+          "instant": false,
+          "range": true,
           "format": "time_series",
           "legendFormat": "",
           "editorMode": "code"
@@ -225,9 +224,9 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "max(anomaly_baseline_stddev{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
-          "instant": true,
-          "range": false,
+          "expr": "max(last_over_time((anomaly_baseline_stddev{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})[5m:]))",
+          "instant": false,
+          "range": true,
           "format": "time_series",
           "legendFormat": "",
           "editorMode": "code"
@@ -300,9 +299,9 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "max(anomaly_z_score{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
-          "instant": true,
-          "range": false,
+          "expr": "max(last_over_time((anomaly_z_score{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})[5m:]))",
+          "instant": false,
+          "range": true,
           "format": "time_series",
           "legendFormat": "",
           "editorMode": "code"
@@ -375,9 +374,9 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "max(anomaly_composite_score{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
-          "instant": true,
-          "range": false,
+          "expr": "max(last_over_time((anomaly_composite_score{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})[5m:]))",
+          "instant": false,
+          "range": true,
           "format": "time_series",
           "legendFormat": "",
           "editorMode": "code"
@@ -464,9 +463,9 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "max((anomaly_health_state{state=\"critical\",metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}*3)+(anomaly_health_state{state=\"warning\",metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}*1)+(anomaly_health_state{state=\"recovering\",metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}*2))",
-          "instant": true,
-          "range": false,
+          "expr": "max(last_over_time((max by(metric_name,instance,exported_instance)((anomaly_health_state{state=\"critical\",metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}*3)+(anomaly_health_state{state=\"warning\",metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}*1)+(anomaly_health_state{state=\"recovering\",metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}*2)))[5m:]))",
+          "instant": false,
+          "range": true,
           "format": "time_series",
           "legendFormat": "",
           "editorMode": "code"
@@ -558,9 +557,9 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "max((anomaly_severity{severity_label=\"critical\",metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}*4)+(anomaly_severity{severity_label=\"high\",metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}*3)+(anomaly_severity{severity_label=\"medium\",metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}*2)+(anomaly_severity{severity_label=\"low\",metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}*1))",
-          "instant": true,
-          "range": false,
+          "expr": "max(last_over_time((max by(metric_name,instance,exported_instance)((anomaly_severity{severity_label=\"critical\",metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}*4)+(anomaly_severity{severity_label=\"high\",metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}*3)+(anomaly_severity{severity_label=\"medium\",metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}*2)+(anomaly_severity{severity_label=\"low\",metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}*1)))[5m:]))",
+          "instant": false,
+          "range": true,
           "format": "time_series",
           "legendFormat": "",
           "editorMode": "code"
@@ -629,9 +628,9 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "max(anomaly_baseline_confidence{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
-          "instant": true,
-          "range": false,
+          "expr": "max(last_over_time((anomaly_baseline_confidence{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})[5m:]))",
+          "instant": false,
+          "range": true,
           "format": "time_series",
           "legendFormat": "",
           "editorMode": "code"
@@ -650,309 +649,6 @@
       "title": "\ud83d\udcc9 Current Value vs Seasonal Baseline",
       "type": "row",
       "panels": []
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${DS_PROMETHEUS}"
-      },
-      "type": "timeseries",
-      "id": 110,
-      "title": "Current Value vs Baseline \u00b11\u03c3 / \u00b12\u03c3",
-      "gridPos": {
-        "h": 10,
-        "w": 24,
-        "x": 0,
-        "y": 6
-      },
-      "options": {
-        "tooltip": {
-          "mode": "multi",
-          "sort": "desc"
-        },
-        "legend": {
-          "displayMode": "list",
-          "placement": "bottom",
-          "calcs": [
-            "lastNotNull",
-            "mean",
-            "max"
-          ]
-        }
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "lineWidth": 2,
-            "fillOpacity": 5,
-            "axisCenteredZero": false,
-            "showPoints": "never",
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            }
-          },
-          "unit": "short",
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "transparent",
-                "value": null
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Current Value"
-            },
-            "properties": [
-              {
-                "id": "custom.lineWidth",
-                "value": 2
-              },
-              {
-                "id": "color",
-                "value": {
-                  "mode": "fixed",
-                  "fixedColor": "rgb(100,160,255)"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Baseline Mean"
-            },
-            "properties": [
-              {
-                "id": "custom.lineStyle",
-                "value": {
-                  "dash": [
-                    8,
-                    4
-                  ],
-                  "fill": "dash"
-                }
-              },
-              {
-                "id": "custom.lineWidth",
-                "value": 2
-              },
-              {
-                "id": "color",
-                "value": {
-                  "mode": "fixed",
-                  "fixedColor": "yellow"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "+1\u03c3"
-            },
-            "properties": [
-              {
-                "id": "custom.lineStyle",
-                "value": {
-                  "dash": [
-                    4,
-                    4
-                  ],
-                  "fill": "dash"
-                }
-              },
-              {
-                "id": "custom.lineWidth",
-                "value": 1
-              },
-              {
-                "id": "color",
-                "value": {
-                  "mode": "fixed",
-                  "fixedColor": "rgba(180,180,180,0.5)"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "-1\u03c3"
-            },
-            "properties": [
-              {
-                "id": "custom.lineStyle",
-                "value": {
-                  "dash": [
-                    4,
-                    4
-                  ],
-                  "fill": "dash"
-                }
-              },
-              {
-                "id": "custom.lineWidth",
-                "value": 1
-              },
-              {
-                "id": "color",
-                "value": {
-                  "mode": "fixed",
-                  "fixedColor": "rgba(180,180,180,0.5)"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "+2\u03c3"
-            },
-            "properties": [
-              {
-                "id": "custom.lineStyle",
-                "value": {
-                  "dash": [
-                    2,
-                    4
-                  ],
-                  "fill": "dash"
-                }
-              },
-              {
-                "id": "custom.lineWidth",
-                "value": 1
-              },
-              {
-                "id": "color",
-                "value": {
-                  "mode": "fixed",
-                  "fixedColor": "rgba(220,80,80,0.45)"
-                }
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "-2\u03c3"
-            },
-            "properties": [
-              {
-                "id": "custom.lineStyle",
-                "value": {
-                  "dash": [
-                    2,
-                    4
-                  ],
-                  "fill": "dash"
-                }
-              },
-              {
-                "id": "custom.lineWidth",
-                "value": 1
-              },
-              {
-                "id": "color",
-                "value": {
-                  "mode": "fixed",
-                  "fixedColor": "rgba(220,80,80,0.45)"
-                }
-              }
-            ]
-          }
-        ]
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "refId": "A",
-          "expr": "max(anomaly_current_value{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
-          "instant": false,
-          "range": true,
-          "format": "time_series",
-          "legendFormat": "Current Value",
-          "editorMode": "code"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "refId": "B",
-          "expr": "max(anomaly_baseline_mean{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
-          "instant": false,
-          "range": true,
-          "format": "time_series",
-          "legendFormat": "Baseline Mean",
-          "editorMode": "code"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "refId": "C",
-          "expr": "max(anomaly_baseline_mean{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})+max(anomaly_baseline_stddev{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
-          "instant": false,
-          "range": true,
-          "format": "time_series",
-          "legendFormat": "+1\u03c3",
-          "editorMode": "code"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "refId": "D",
-          "expr": "max(anomaly_baseline_mean{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})-max(anomaly_baseline_stddev{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
-          "instant": false,
-          "range": true,
-          "format": "time_series",
-          "legendFormat": "-1\u03c3",
-          "editorMode": "code"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "refId": "E",
-          "expr": "max(anomaly_baseline_mean{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})+(2*max(anomaly_baseline_stddev{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}))",
-          "instant": false,
-          "range": true,
-          "format": "time_series",
-          "legendFormat": "+2\u03c3",
-          "editorMode": "code"
-        },
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${DS_PROMETHEUS}"
-          },
-          "refId": "F",
-          "expr": "max(anomaly_baseline_mean{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})-(2*max(anomaly_baseline_stddev{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}))",
-          "instant": false,
-          "range": true,
-          "format": "time_series",
-          "legendFormat": "-2\u03c3",
-          "editorMode": "code"
-        }
-      ]
     },
     {
       "collapsed": false,
@@ -1042,7 +738,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "max(anomaly_z_score{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
+          "expr": "max by(metric_name,instance,exported_instance)(anomaly_z_score{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
           "instant": false,
           "range": true,
           "format": "time_series",
@@ -1127,7 +823,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "max(anomaly_composite_score{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
+          "expr": "max by(metric_name,instance,exported_instance)(anomaly_composite_score{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
           "instant": false,
           "range": true,
           "format": "time_series",
@@ -1143,7 +839,7 @@
       },
       "type": "timeseries",
       "id": 114,
-      "title": "Window Anomaly % (% of current window that was bad)",
+      "title": "Window Anomaly % (% of current window that was anomalous)",
       "gridPos": {
         "h": 9,
         "w": 8,
@@ -1215,7 +911,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "max(anomaly_percentage{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
+          "expr": "max by(metric_name,instance,exported_instance)(anomaly_percentage{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
           "instant": false,
           "range": true,
           "format": "time_series",
@@ -1233,7 +929,7 @@
         "y": 26
       },
       "id": 115,
-      "title": "\ud83d\udcd0 Trend & Spike Analysis",
+      "title": "\ud83d\udcd0 Trend & Spike",
       "type": "row",
       "panels": []
     },
@@ -1301,7 +997,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "max(anomaly_trend_slope_normalized{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
+          "expr": "max by(metric_name,instance,exported_instance)(anomaly_trend_slope_normalized{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
           "instant": false,
           "range": true,
           "format": "time_series",
@@ -1314,7 +1010,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "B",
-          "expr": "max(anomaly_trend_slope{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
+          "expr": "max by(metric_name,instance,exported_instance)(anomaly_trend_slope{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
           "instant": false,
           "range": true,
           "format": "time_series",
@@ -1396,7 +1092,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "max(anomaly_spike_score{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
+          "expr": "max by(metric_name,instance,exported_instance)(anomaly_spike_score{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
           "instant": false,
           "range": true,
           "format": "time_series",
@@ -1493,11 +1189,11 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "(anomaly_health_state{state=\"critical\",metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}*3)+(anomaly_health_state{state=\"warning\",metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}*1)+(anomaly_health_state{state=\"recovering\",metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}*2)",
+          "expr": "max by(metric_name,instance,exported_instance)((anomaly_health_state{state=\"critical\",metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}*3)+(anomaly_health_state{state=\"warning\",metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}*1)+(anomaly_health_state{state=\"recovering\",metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"}*2))",
           "instant": false,
           "range": true,
           "format": "time_series",
-          "legendFormat": "{{metric_name}} / {{instance}}",
+          "legendFormat": "Health State",
           "editorMode": "code"
         }
       ]
@@ -1579,7 +1275,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "max(anomaly_consecutive_cycles{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
+          "expr": "max by(metric_name,instance,exported_instance)(anomaly_consecutive_cycles{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
           "instant": false,
           "range": true,
           "format": "time_series",
@@ -1667,9 +1363,9 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "max(anomaly_baseline_samples{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
-          "instant": true,
-          "range": false,
+          "expr": "max(last_over_time((anomaly_baseline_samples{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})[5m:]))",
+          "instant": false,
+          "range": true,
           "format": "time_series",
           "legendFormat": "",
           "editorMode": "code"
@@ -1738,9 +1434,9 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "max(anomaly_baseline_confidence{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
-          "instant": true,
-          "range": false,
+          "expr": "max(last_over_time((anomaly_baseline_confidence{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})[5m:]))",
+          "instant": false,
+          "range": true,
           "format": "time_series",
           "legendFormat": "",
           "editorMode": "code"
@@ -1801,9 +1497,9 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "max(anomaly_hour_of_day{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
-          "instant": true,
-          "range": false,
+          "expr": "max(last_over_time((anomaly_hour_of_day{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})[5m:]))",
+          "instant": false,
+          "range": true,
           "format": "time_series",
           "legendFormat": "",
           "editorMode": "code"
@@ -1880,9 +1576,9 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "max(anomaly_weekend_baseline{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
-          "instant": true,
-          "range": false,
+          "expr": "max(last_over_time((anomaly_weekend_baseline{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})[5m:]))",
+          "instant": false,
+          "range": true,
           "format": "time_series",
           "legendFormat": "",
           "editorMode": "code"
@@ -1963,9 +1659,9 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "anomaly_silenced{metric_name=\"$metric_name\"}",
-          "instant": true,
-          "range": false,
+          "expr": "last_over_time(anomaly_silenced{metric_name=\"$metric_name\"}[5m])",
+          "instant": false,
+          "range": true,
           "format": "time_series",
           "legendFormat": "",
           "editorMode": "code"
@@ -2031,8 +1727,8 @@
           },
           "refId": "A",
           "expr": "increase(anomaly_detector_scrape_errors_total{metric_name=\"$metric_name\"}[24h])",
-          "instant": true,
-          "range": false,
+          "instant": false,
+          "range": true,
           "format": "time_series",
           "legendFormat": "",
           "editorMode": "code"
@@ -2046,7 +1742,7 @@
       },
       "type": "timeseries",
       "id": 128,
-      "title": "Baseline Confidence Over Time (low = possible false positives)",
+      "title": "Baseline Confidence Over Time",
       "gridPos": {
         "h": 6,
         "w": 12,
@@ -2111,7 +1807,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "max(anomaly_baseline_confidence{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
+          "expr": "max by(metric_name,instance,exported_instance)(anomaly_baseline_confidence{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
           "instant": false,
           "range": true,
           "format": "time_series",
@@ -2192,7 +1888,7 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "max(anomaly_baseline_samples{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
+          "expr": "max by(metric_name,instance,exported_instance)(anomaly_baseline_samples{metric_name=\"$metric_name\",instance=\"$instance\",exported_instance=~\"$exported_instance\"})",
           "instant": false,
           "range": true,
           "format": "time_series",
@@ -2210,7 +1906,7 @@
         "y": 54
       },
       "id": 130,
-      "title": "\ud83c\udf10 Same Metric \u2014 All Instances Comparison",
+      "title": "\ud83c\udf10 Same Metric \u2014 All Instances",
       "type": "row",
       "panels": []
     },
@@ -2221,7 +1917,7 @@
       },
       "type": "timeseries",
       "id": 131,
-      "title": "Current Value \u2014 All Instances",
+      "title": "Current Value \u2014 All Instances (detect systemic vs single-node)",
       "gridPos": {
         "h": 9,
         "w": 24,
@@ -2407,7 +2103,7 @@
               },
               {
                 "id": "custom.width",
-                "value": 130
+                "value": 135
               },
               {
                 "id": "decimals",
@@ -2932,15 +2628,25 @@
                 "value": 70
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time"
+            },
+            "properties": [
+              {
+                "id": "custom.hidden",
+                "value": true
+              }
+            ]
           }
         ]
       },
       "transformations": [
         {
           "id": "merge",
-          "options": {
-            "reducers": []
-          }
+          "options": {}
         },
         {
           "id": "organize",
@@ -2962,15 +2668,15 @@
               "metric_name": "Metric",
               "instance": "Instance",
               "exported_instance": "Exported Instance",
-              "Time": "",
-              "job": "",
+              "Time": "__time__",
               "__name__": ""
             },
             "excludeByName": {
-              "Time": true,
-              "job": true,
+              "__time__": true,
               "__name__": true,
-              "": true
+              "job": true,
+              "state": true,
+              "severity_label": true
             },
             "indexByName": {
               "Metric": 0,
@@ -3011,11 +2717,11 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "A",
-          "expr": "(anomaly_composite_score{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}) and on(metric_name,instance,exported_instance) (anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)",
+          "expr": "max by(metric_name,instance,exported_instance)(last_over_time((anomaly_composite_score{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"})[5m:])) and on(metric_name,instance,exported_instance) (last_over_time((anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)[5m:]))",
           "instant": true,
           "range": false,
           "format": "table",
-          "legendFormat": "Composite Score",
+          "legendFormat": "",
           "editorMode": "code"
         },
         {
@@ -3024,11 +2730,11 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "B",
-          "expr": "(anomaly_z_score{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}) and on(metric_name,instance,exported_instance) (anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)",
+          "expr": "max by(metric_name,instance,exported_instance)(last_over_time((anomaly_z_score{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"})[5m:])) and on(metric_name,instance,exported_instance) (last_over_time((anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)[5m:]))",
           "instant": true,
           "range": false,
           "format": "table",
-          "legendFormat": "Z-Score",
+          "legendFormat": "",
           "editorMode": "code"
         },
         {
@@ -3037,11 +2743,11 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "C",
-          "expr": "(anomaly_percentage{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}) and on(metric_name,instance,exported_instance) (anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)",
+          "expr": "max by(metric_name,instance,exported_instance)(last_over_time((anomaly_percentage{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"})[5m:])) and on(metric_name,instance,exported_instance) (last_over_time((anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)[5m:]))",
           "instant": true,
           "range": false,
           "format": "table",
-          "legendFormat": "Window Anomaly %",
+          "legendFormat": "",
           "editorMode": "code"
         },
         {
@@ -3050,11 +2756,11 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "D",
-          "expr": "(anomaly_current_value{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}) and on(metric_name,instance,exported_instance) (anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)",
+          "expr": "max by(metric_name,instance,exported_instance)(last_over_time((anomaly_current_value{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"})[5m:])) and on(metric_name,instance,exported_instance) (last_over_time((anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)[5m:]))",
           "instant": true,
           "range": false,
           "format": "table",
-          "legendFormat": "Current Value",
+          "legendFormat": "",
           "editorMode": "code"
         },
         {
@@ -3063,11 +2769,11 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "E",
-          "expr": "(anomaly_baseline_mean{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}) and on(metric_name,instance,exported_instance) (anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)",
+          "expr": "max by(metric_name,instance,exported_instance)(last_over_time((anomaly_baseline_mean{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"})[5m:])) and on(metric_name,instance,exported_instance) (last_over_time((anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)[5m:]))",
           "instant": true,
           "range": false,
           "format": "table",
-          "legendFormat": "Baseline Mean",
+          "legendFormat": "",
           "editorMode": "code"
         },
         {
@@ -3076,11 +2782,11 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "F",
-          "expr": "(anomaly_baseline_stddev{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}) and on(metric_name,instance,exported_instance) (anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)",
+          "expr": "max by(metric_name,instance,exported_instance)(last_over_time((anomaly_baseline_stddev{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"})[5m:])) and on(metric_name,instance,exported_instance) (last_over_time((anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)[5m:]))",
           "instant": true,
           "range": false,
           "format": "table",
-          "legendFormat": "Std Dev",
+          "legendFormat": "",
           "editorMode": "code"
         },
         {
@@ -3089,11 +2795,11 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "G",
-          "expr": "(anomaly_trend_slope_normalized{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}) and on(metric_name,instance,exported_instance) (anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)",
+          "expr": "max by(metric_name,instance,exported_instance)(last_over_time((anomaly_trend_slope_normalized{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"})[5m:])) and on(metric_name,instance,exported_instance) (last_over_time((anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)[5m:]))",
           "instant": true,
           "range": false,
           "format": "table",
-          "legendFormat": "Trend",
+          "legendFormat": "",
           "editorMode": "code"
         },
         {
@@ -3102,11 +2808,11 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "H",
-          "expr": "(anomaly_spike_score{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}) and on(metric_name,instance,exported_instance) (anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)",
+          "expr": "max by(metric_name,instance,exported_instance)(last_over_time((anomaly_spike_score{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"})[5m:])) and on(metric_name,instance,exported_instance) (last_over_time((anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)[5m:]))",
           "instant": true,
           "range": false,
           "format": "table",
-          "legendFormat": "Spike",
+          "legendFormat": "",
           "editorMode": "code"
         },
         {
@@ -3115,11 +2821,11 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "I",
-          "expr": "(anomaly_consecutive_cycles{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}) and on(metric_name,instance,exported_instance) (anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)",
+          "expr": "max by(metric_name,instance,exported_instance)(last_over_time((anomaly_consecutive_cycles{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"})[5m:])) and on(metric_name,instance,exported_instance) (last_over_time((anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)[5m:]))",
           "instant": true,
           "range": false,
           "format": "table",
-          "legendFormat": "Consecutive",
+          "legendFormat": "",
           "editorMode": "code"
         },
         {
@@ -3128,11 +2834,11 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "J",
-          "expr": "(anomaly_baseline_samples{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}) and on(metric_name,instance,exported_instance) (anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)",
+          "expr": "max by(metric_name,instance,exported_instance)(last_over_time((anomaly_baseline_samples{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"})[5m:])) and on(metric_name,instance,exported_instance) (last_over_time((anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)[5m:]))",
           "instant": true,
           "range": false,
           "format": "table",
-          "legendFormat": "Samples",
+          "legendFormat": "",
           "editorMode": "code"
         },
         {
@@ -3141,11 +2847,11 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "K",
-          "expr": "(anomaly_baseline_confidence{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}) and on(metric_name,instance,exported_instance) (anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)",
+          "expr": "max by(metric_name,instance,exported_instance)(last_over_time((anomaly_baseline_confidence{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"})[5m:])) and on(metric_name,instance,exported_instance) (last_over_time((anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)[5m:]))",
           "instant": true,
           "range": false,
           "format": "table",
-          "legendFormat": "Confidence",
+          "legendFormat": "",
           "editorMode": "code"
         },
         {
@@ -3154,11 +2860,11 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "L",
-          "expr": "((anomaly_health_state{state=\"critical\",metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}*3)+(anomaly_health_state{state=\"warning\",metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}*1)+(anomaly_health_state{state=\"recovering\",metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}*2)) and on(metric_name,instance,exported_instance) (anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)",
+          "expr": "max by(metric_name,instance,exported_instance)(last_over_time((max by(metric_name,instance,exported_instance)((anomaly_health_state{state=\"critical\",metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}*3)+(anomaly_health_state{state=\"warning\",metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}*1)+(anomaly_health_state{state=\"recovering\",metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}*2)))[5m:])) and on(metric_name,instance,exported_instance) (last_over_time((anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)[5m:]))",
           "instant": true,
           "range": false,
           "format": "table",
-          "legendFormat": "Health State",
+          "legendFormat": "",
           "editorMode": "code"
         },
         {
@@ -3167,11 +2873,11 @@
             "uid": "${DS_PROMETHEUS}"
           },
           "refId": "M",
-          "expr": "((anomaly_severity{severity_label=\"critical\",metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}*4)+(anomaly_severity{severity_label=\"high\",metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}*3)+(anomaly_severity{severity_label=\"medium\",metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}*2)+(anomaly_severity{severity_label=\"low\",metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}*1)) and on(metric_name,instance,exported_instance) (anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)",
+          "expr": "max by(metric_name,instance,exported_instance)(last_over_time((max by(metric_name,instance,exported_instance)((anomaly_severity{severity_label=\"critical\",metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}*4)+(anomaly_severity{severity_label=\"high\",metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}*3)+(anomaly_severity{severity_label=\"medium\",metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}*2)+(anomaly_severity{severity_label=\"low\",metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"}*1)))[5m:])) and on(metric_name,instance,exported_instance) (last_over_time((anomaly_detected{metric_name=~\".*\",instance=\"$instance\",exported_instance=~\"$exported_instance\",metric_name!=\"$metric_name\"} == 1)[5m:]))",
           "instant": true,
           "range": false,
           "format": "table",
-          "legendFormat": "Severity",
+          "legendFormat": "",
           "editorMode": "code"
         }
       ]
